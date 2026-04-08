@@ -66,6 +66,7 @@ EOF
 
 REPO=""
 GITHUB_TOKEN="${GITHUB_TOKEN:-}"
+CURRENT_USER=""
 
 init() {
   # Detect repo from git remote
@@ -88,8 +89,14 @@ init() {
   fi
   [[ -z "${GITHUB_TOKEN}" ]] && die "GITHUB_TOKEN is not set.\nAdd it to .env: echo 'GITHUB_TOKEN=ghp_xxx' >> .env"
 
+  # Resolve authenticated user for auto-assignment
+  local user_response
+  user_response=$(gh_api GET "/user")
+  CURRENT_USER=$(echo "$user_response" | python3 -c 'import json,sys; print(json.load(sys.stdin)["login"])' 2>/dev/null) || CURRENT_USER=""
+
   echo ""
   bold "Repository: ${REPO}"
+  [[ -n "$CURRENT_USER" ]] && bold "User:       ${CURRENT_USER}"
   echo ""
 }
 
@@ -161,9 +168,12 @@ create_issue() {
 
   blue "Creating issue: \"${title}\"..."
 
+  local assignees="[]"
+  [[ -n "$CURRENT_USER" ]] && assignees="[$(json_str "$CURRENT_USER")]"
+
   local response
   response=$(gh_api POST "/repos/${REPO}/issues" \
-    "{\"title\": $(json_str "$title")}")
+    "{\"title\": $(json_str "$title"), \"assignees\": ${assignees}}")
 
   local issue_number issue_url
   issue_number=$(echo "$response" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d["number"])' 2>/dev/null) \
@@ -171,6 +181,7 @@ create_issue() {
   issue_url=$(echo "$response" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d["html_url"])')
 
   green "Issue #${issue_number} created: ${issue_url}"
+  [[ -n "$CURRENT_USER" ]] && green "Assigned to: ${CURRENT_USER}"
   echo "$issue_number"
 }
 
