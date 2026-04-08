@@ -27,10 +27,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> register(String email, String username, String password) async {
-    await _apiClient.dio.post(
-      '/auth/register',
-      data: {'mail': email, 'username': username, 'password': password},
-    );
+    try {
+      print('[AuthRemoteDataSource.register] Posting to /auth/register');
+      print('[AuthRemoteDataSource.register] Email: $email, Username: $username');
+      final response = await _apiClient.dio.post(
+        '/auth/register',
+        data: {'mail': email, 'username': username, 'password': password},
+      );
+      print('[AuthRemoteDataSource.register] Success! Response: ${response.data}');
+    } catch (e, stack) {
+      print('[AuthRemoteDataSource.register] ERROR: $e');
+      print('[AuthRemoteDataSource.register] STACK: $stack');
+      rethrow;
+    }
   }
 
   @override
@@ -42,6 +51,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
 @riverpod
 Future<AuthRemoteDataSource> authRemoteDataSource(Ref ref) async {
-  final apiClient = await ref.watch(apiClientProvider.future);
-  return AuthRemoteDataSourceImpl(apiClient);
+  print('[authRemoteDataSourceProvider] Getting apiClient...');
+  try {
+    final apiClient = await ref.watch(apiClientProvider.future);
+    print('[authRemoteDataSourceProvider] Got apiClient, creating AuthRemoteDataSourceImpl');
+    return AuthRemoteDataSourceImpl(apiClient);
+  } catch (e, stack) {
+    print('[authRemoteDataSourceProvider] ERROR: $e');
+    print('[authRemoteDataSourceProvider] STACK: $stack');
+    rethrow;
+  }
 }
