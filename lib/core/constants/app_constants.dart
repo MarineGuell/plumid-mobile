@@ -1,6 +1,10 @@
+import 'dart:io';
+
 class AppConstants {
   // API Configuration
-  static const String apiBaseUrl = 'YOUR_API_BASE_URL';
+  // Android emulator routes localhost via 10.0.2.2 (host machine)
+  static String get apiBaseUrl =>
+      Platform.isAndroid ? 'http://10.0.2.2:5173/api' : 'http://localhost:5173/api';
   static const int apiTimeout = 30000; // 30 seconds
 
   // Image Configuration

@@ -1,18 +1,21 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plum_id_mobile/core/theme/app_theme.dart';
+import 'package:plum_id_mobile/presentation/home/notifiers/identification_provider.dart';
+import 'package:plum_id_mobile/presentation/identification/screens/results_screen.dart';
 import 'package:plum_id_mobile/presentation/widgets/info_card.dart';
 
-class ImportScreen extends StatefulWidget {
+class ImportScreen extends ConsumerStatefulWidget {
   final File selectedImage;
 
   const ImportScreen({super.key, required this.selectedImage});
 
   @override
-  State<ImportScreen> createState() => _ImportScreenState();
+  ConsumerState<ImportScreen> createState() => _ImportScreenState();
 }
 
-class _ImportScreenState extends State<ImportScreen> with SingleTickerProviderStateMixin {
+class _ImportScreenState extends ConsumerState<ImportScreen> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _glowAnimation;
 
@@ -36,12 +39,13 @@ class _ImportScreenState extends State<ImportScreen> with SingleTickerProviderSt
   }
 
   void _uploadImage() {
-    // TODO: Connect this to the API for identification
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Identification en cours... (API à connecter)')),
-      );
-    }
+    ref
+        .read(identificationNotifierProvider.notifier)
+        .identifyBird(widget.selectedImage.path);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ResultsScreen()),
+    );
   }
 
   @override

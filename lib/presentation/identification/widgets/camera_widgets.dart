@@ -2,19 +2,22 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:plum_id_mobile/core/theme/app_theme.dart';
+import 'package:plum_id_mobile/presentation/home/notifiers/identification_provider.dart';
+import 'package:plum_id_mobile/presentation/identification/screens/results_screen.dart';
 
-class CameraScreen extends StatefulWidget {
+class CameraScreen extends ConsumerStatefulWidget {
   final CameraDescription camera;
   const CameraScreen({super.key, required this.camera});
 
   @override
-  State<CameraScreen> createState() => _CameraScreenState();
+  ConsumerState<CameraScreen> createState() => _CameraScreenState();
 }
 
-class _CameraScreenState extends State<CameraScreen> {
+class _CameraScreenState extends ConsumerState<CameraScreen> {
   late CameraController controller;
   // Variables pour le Flash
   FlashMode _currentFlashMode = FlashMode.off;
@@ -207,23 +210,19 @@ class _CameraScreenState extends State<CameraScreen> {
       );
 
       if (shouldSent == true) {
-        // On récupére le répertoire ou l'image sera stocker
         final directory = await getApplicationDocumentsDirectory();
-
-        // Création du fichier
         final timestamp = DateTime.now().microsecondsSinceEpoch;
         final filePath = path.join(directory.path, 'photo_$timestamp.jpg');
-
-        // Sauvegarde de l'image
         await File(image.path).copy(filePath);
 
-        print("Image sauvegardé à $filePath");
-
-        if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text("Photo sauvegardée")));
-        }
+        if (!mounted) return;
+        ref
+            .read(identificationNotifierProvider.notifier)
+            .identifyBird(filePath);
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ResultsScreen()),
+        );
       }
     } catch (e) {
       print("Erreur $e");
