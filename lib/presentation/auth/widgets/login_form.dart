@@ -43,7 +43,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   @override
   Widget build(BuildContext context) {
     ref.listen(authNotifierProvider, (previous, next) {
-
       if (next.isLoading) return;
 
       if (next.hasError) {
@@ -61,7 +60,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             errorMessage = apiError['message'] ?? errorMessage;
 
             if (error.response?.statusCode == 401) {
-              errorMessage = 'Email ou mot de passe invalide';
+              errorMessage = 'Email ou mot de passe incorrect';
             } else if (error.response?.statusCode == 404) {
               errorMessage = 'Compte introuvable';
             }
@@ -132,22 +131,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               if (value == null || value.isEmpty) {
                 return 'Veuillez entrer votre mot de passe';
               }
-              if (value.length < 8) {
-                return 'Le mot de passe doit contenir au moins 8 caractères';
-              }
-              if (!value.contains(RegExp(r'[A-Z]'))) {
-                return 'Le mot de passe doit contenir au moins une majuscule';
-              }
-              if (!value.contains(RegExp(r'[a-z]'))) {
-                return 'Le mot de passe doit contenir au moins une minuscule';
-              }
-              if (!value.contains(RegExp(r'[0-9]'))) {
-                return 'Le mot de passe doit contenir au moins un chiffre';
-              }
-              if (!value.contains(RegExp(r'[!@#$%^&*]'))) {
-                return 'Le mot de passe doit contenir au moins un caractère spécial';
-              }
-
               return null;
             },
           ),

@@ -123,7 +123,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
             controller: _usernameController,
             decoration: InputDecoration(
               labelText: 'Nom d\'utilisateur',
-              hintText: 'toto34',
+              hintText: 'marine123',
               prefixIcon: const Icon(Icons.person_outline),
               errorText: _fieldErrors['username'],
             ),
@@ -154,9 +154,14 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               if (value == null || value.isEmpty) {
                 return 'Veuillez entrer votre email';
               }
-              if (!value.contains('@')) {
+              final emailRegex = RegExp(
+                r'^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$',
+              );
+
+              if (!emailRegex.hasMatch(value)) {
                 return 'Veuillez entrer un email valide';
               }
+
               return null;
             },
           ),
@@ -187,10 +192,27 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Veuillez entrer un mot de passe';
+                return 'Veuillez entrer votre mot de passe';
               }
-              if (value.length < 8) {
-                return 'Le mot de passe doit contenir au moins 8 caractères';
+
+              if (value.length < 6) {
+                return 'Le mot de passe doit contenir au moins 6 caractères';
+              }
+
+              // if (!value.contains(RegExp(r'[A-Z]'))) {
+              //   return 'Le mot de passe doit contenir au moins une majuscule';
+              // }
+
+              if (!value.contains(RegExp(r'[a-z]'))) {
+                return 'Le mot de passe doit contenir au moins une minuscule';
+              }
+
+              if (!value.contains(RegExp(r'[0-9]'))) {
+                return 'Le mot de passe doit contenir au moins un chiffre';
+              }
+
+              if (!value.contains(RegExp(r'[!@#$%^&*]'))) {
+                return 'Le mot de passe doit contenir au moins un caractère spécial';
               }
               return null;
             },
@@ -236,7 +258,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
           ElevatedButton(
             onPressed: isLoading ? null : _handleRegister,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.secondaryColor,
+              backgroundColor: AppTheme.primaryColor,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),

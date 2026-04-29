@@ -83,7 +83,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
                       const SizedBox(height: AppConstants.mediumSpacing),
 
-                      // Form
+                      // Form to redirect
                       _isLogin ? const LoginForm() : const RegisterForm(),
 
                       const SizedBox(height: AppConstants.mediumSpacing),
