@@ -2,7 +2,7 @@
 
 Application mobile Flutter pour l'identification d'oiseaux à partir de photos de plumes.
 
-## 🎯 Fonctionnalités
+## 🎯 Fonctionnalités 
 
 - 📷 **Capture de photo** : Prenez une photo ou sélectionnez depuis la galerie
 - 🤖 **Identification IA** : Reconnaissance d'espèces via modèle d'IA
