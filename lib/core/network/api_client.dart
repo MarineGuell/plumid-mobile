@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:plum_id_mobile/core/constants/app_constants.dart';
 import 'package:plum_id_mobile/core/utils/token_storage.dart';
 
 part 'api_client.g.dart';
@@ -20,13 +21,8 @@ Future<ApiClient> apiClient(ApiClientRef ref) async {
     final tokenStorage = await ref.watch(tokenStorageProvider.future);
     print('[apiClientProvider] Got tokenStorage');
 
-    // Web cannot use dart:io Platform checks; use Flutter platform APIs instead.
     final baseUrl =
-        kIsWeb
-            ? 'http://localhost:8000'
-            : (defaultTargetPlatform == TargetPlatform.android
-                ? 'http://10.0.2.2:8000'
-                : 'http://localhost:8000');
+        kIsWeb ? 'http://localhost:8000' : 'http://${AppConstants.devHost}:8000';
     print('[apiClientProvider] Using baseUrl: $baseUrl');
 
     final dio = Dio(

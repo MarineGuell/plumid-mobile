@@ -49,10 +49,20 @@ Dio dio(Ref ref) {
       },
     ),
   );
-
-  // Add interceptors for logging, auth, etc.
   dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+  return dio;
+}
 
+@riverpod
+Dio hfDio(Ref ref) {
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: AppConstants.hfBaseUrl,
+      connectTimeout: const Duration(milliseconds: AppConstants.apiTimeout),
+      receiveTimeout: const Duration(milliseconds: AppConstants.apiTimeout),
+    ),
+  );
+  dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
   return dio;
 }
 
@@ -67,7 +77,10 @@ Future<SharedPreferences> sharedPreferences(Ref ref) async {
 
 @riverpod
 IIdentificationRemoteDataSource identificationRemoteDataSource(Ref ref) {
-  return IdentificationRemoteDataSource(ref.watch(dioProvider));
+  return IdentificationRemoteDataSource(
+    localDio: ref.watch(dioProvider),
+    hfDio: ref.watch(hfDioProvider),
+  );
 }
 
 @riverpod

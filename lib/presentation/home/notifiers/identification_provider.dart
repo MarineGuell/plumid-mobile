@@ -40,7 +40,7 @@ class IdentificationState {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class IdentificationNotifier extends _$IdentificationNotifier {
   @override
   IdentificationState build() {

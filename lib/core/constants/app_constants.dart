@@ -1,10 +1,12 @@
-import 'dart:io';
-
 class AppConstants {
   // API Configuration
-  // Android emulator routes localhost via 10.0.2.2 (host machine)
-  static String get apiBaseUrl =>
-      Platform.isAndroid ? 'http://10.0.2.2:5173/api' : 'http://localhost:5173/api';
+  // Emulator    → 10.0.2.2        (adresse spéciale émulateur Android)
+  // Vrai appareil → IP WiFi du PC  (ex: 192.168.1.42)
+  // ↓ Seule ligne à modifier pour changer l'hôte de dev
+  static const String devHost = '172.20.10.3';
+  static String get apiBaseUrl => 'http://$devHost:8000/api';
+  static const String hfBaseUrl =
+      'https://bakezechiel-image-recognition-api-1.hf.space';
   static const int apiTimeout = 30000; // 30 seconds
 
   // Image Configuration
