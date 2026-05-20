@@ -46,6 +46,9 @@ Dio dio(Ref ref) {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'X-API-Key': AppConstants.plumidApiKey,
+        'X-Auth-Secret': AppConstants.authSecret,
+        'X-HMAC-Secret': AppConstants.appHmacSecret,
       },
     ),
   );

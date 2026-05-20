@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:plum_id_mobile/core/constants/app_constants.dart';
 import 'package:plum_id_mobile/core/utils/token_storage.dart';
@@ -21,18 +20,19 @@ Future<ApiClient> apiClient(ApiClientRef ref) async {
     final tokenStorage = await ref.watch(tokenStorageProvider.future);
     print('[apiClientProvider] Got tokenStorage');
 
-    final baseUrl =
-        kIsWeb ? 'http://localhost:8000' : 'http://${AppConstants.devHost}:8000';
-    print('[apiClientProvider] Using baseUrl: $baseUrl');
+    print('[apiClientProvider] Using baseUrl: ${AppConstants.apiBaseUrl}');
 
     final dio = Dio(
       BaseOptions(
-        baseUrl: baseUrl,
+        baseUrl: AppConstants.apiBaseUrl,
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'X-API-Key': AppConstants.plumidApiKey,
+          'X-Auth-Secret': AppConstants.authSecret,
+          'X-HMAC-Secret': AppConstants.appHmacSecret,
         },
       ),
     );

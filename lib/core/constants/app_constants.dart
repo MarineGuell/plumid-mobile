@@ -2,12 +2,25 @@ class AppConstants {
   // API Configuration
   // Emulator    → 10.0.2.2        (adresse spéciale émulateur Android)
   // Vrai appareil → IP WiFi du PC  (ex: 192.168.1.42)
-  // ↓ Seule ligne à modifier pour changer l'hôte de dev
   static const String devHost = '172.20.10.3';
-  static String get apiBaseUrl => 'http://$devHost:8000/api';
+  static String get apiBaseUrl => 'https://plumid-api.up.railway.app'; // 'http://$devHost:8000/api';
   static const String hfBaseUrl =
       'https://bakezechiel-image-recognition-api-1.hf.space';
   static const int apiTimeout = 30000; // 30 seconds
+
+  // API Keys — injected at build time via --dart-define, fallback to dev values
+  static const String authSecret = String.fromEnvironment(
+    'AUTH_SECRET',
+    defaultValue: 'xSuI2GQKG8n4BbMaexBpFO4w1kZjms-2iAH8uULt2gfjfm_y-Vn5O55iPW7fxV7n',
+  );
+  static const String appHmacSecret = String.fromEnvironment(
+    'APP_HMAC_SECRET',
+    defaultValue: 'xBfjwlTCx-zyPlNvh5t3TuxIfnaMoZYYGBrQJy7U-EHJvtgdTyvIKE4N9gtL1YXm',
+  );
+  static const String plumidApiKey = String.fromEnvironment(
+    'PLUMID_API_KEY',
+    defaultValue: 'FOMgNdJdvOavL9xru3SY-Sl0Wop2Gnt6yIUjBHje8gTK4VcIIgBn5-yd7q5KtHsf',
+  );
 
   // Image Configuration
   static const double maxImageSizeMB = 5.0;
