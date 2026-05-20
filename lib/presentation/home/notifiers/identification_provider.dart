@@ -1,7 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../../domain/entities/identification.dart';
 import '../../../domain/entities/prediction.dart';
 import '../../../domain/entities/location.dart';
 import '../../../domain/usecases/identify_bird.dart';
+import '../../../domain/usecases/save_identification.dart';
 import '../../../domain/usecases/usecase.dart';
 import '../../providers/providers.dart';
 
@@ -87,8 +89,27 @@ class IdentificationNotifier extends _$IdentificationNotifier {
           location: location,
           error: null,
         );
+        _saveToHistory(imagePath, predictions, location);
       },
     );
+  }
+
+  Future<void> _saveToHistory(
+    String imagePath,
+    List<Prediction> predictions,
+    Location? location,
+  ) async {
+    final identification = Identification(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      imageUrl: '',
+      localImagePath: imagePath,
+      timestamp: DateTime.now(),
+      location: location,
+      predictions: predictions,
+      selectedPrediction: predictions.isNotEmpty ? predictions.first : null,
+    );
+    final saveUseCase = ref.read(saveIdentificationUseCaseProvider);
+    await saveUseCase(SaveIdentificationParams(identification: identification));
   }
 
   /// Clears the current identification
