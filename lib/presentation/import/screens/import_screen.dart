@@ -76,23 +76,25 @@ class _ImportScreenState extends ConsumerState<ImportScreen> with SingleTickerPr
                 const SizedBox(height: 20),
 
                 // Image preview
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.width * 1.0, // Portrait aspect ratio
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(16),
-                    image: DecorationImage(
-                      image: FileImage(widget.selectedImage),
-                      fit: BoxFit.cover,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
+                    child: Image.file(
+                      widget.selectedImage,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
 

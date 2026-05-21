@@ -3,7 +3,7 @@ class AppConstants {
   // Emulator    → 10.0.2.2        (adresse spéciale émulateur Android)
   // Vrai appareil → IP WiFi du PC  (ex: 192.168.1.42)
   static const String devHost = '172.20.10.3';
-  static String get apiBaseUrl => 'https://plumid-api.up.railway.app'; // 'http://$devHost:8000/api';
+  static String get apiBaseUrl => 'https://plumid-api.up.railway.app';
   static const String hfBaseUrl =
       'https://bakezechiel-image-recognition-api-1.hf.space';
   static const int apiTimeout = 30000; // 30 seconds
